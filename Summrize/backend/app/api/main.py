@@ -16,7 +16,7 @@ async def upload_pdf(file: UploadFile = File(...)):
         f.write(await file.read())
 
     text = extract_text_from_pdf(file_location)
-    return JSONResponse(content={"filename": file.filename, "extracted_text": text[:1000]})
+    from .ai_utils import summarize_document\n\n    summary = summarize_document(text)\n    return JSONResponse(content={"filename": file.filename, "summary": summary})
 
 def extract_text_from_pdf(pdf_path):
     doc = fitz.open(pdf_path)

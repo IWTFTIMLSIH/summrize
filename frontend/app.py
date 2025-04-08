@@ -4,7 +4,7 @@ import openai
 import os
 
 # Load OpenAI API key from Streamlit secrets
-openai.api_key = st.secrets["general"]["OPENAI_API_KEY"]
+client = openai.OpenAI(api_key=st.secrets["general"]["OPENAI_API_KEY"])
 
 st.set_page_config(page_title="Summrize", layout="centered")
 st.title("📄 Summrize – Alberta Condo Doc Review")
@@ -34,13 +34,13 @@ Document:
 Provide the summary below:
 """
 
-    response = openai.ChatCompletion.create(
+    response = client.chat.completions.create(
         model="gpt-4",
         messages=[{"role": "user", "content": prompt}],
         temperature=0.3,
         max_tokens=700
     )
-    return response["choices"][0]["message"]["content"]
+    return response.choices[0].message.content
 
 if uploaded_file:
     st.info(f"📄 File uploaded: {uploaded_file.name}")
